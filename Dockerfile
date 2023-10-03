@@ -28,10 +28,12 @@ rosdep install --from-paths . --ignore-src -y
 # # # ビルド
 WORKDIR /ros2_ws
 RUN . /opt/ros/iron/setup.sh && \
-colcon build
+colcon build --symlink-install
 
 # 環境変数の設定
-RUN echo 'source /ros2_ws/install/setup.bash' >> ~/.bashrc
+RUN echo 'source /ros2_ws/install/setup.bash' >> ~/.bashrc && \
+    echo 'export TURTLEBOT3_MODEL=waffle' >> ~/.bashrc && \
+    echo 'export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/opt/ros/iron/share/turtlebot3_gazebo/models' >> ~/.bashrc
 
 # ターミナルを起動するための設定
 CMD ["bash"]
