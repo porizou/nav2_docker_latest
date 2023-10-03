@@ -1,5 +1,5 @@
 # ベースイメージとしてosrf/ros2:develを使用
-FROM althack/ros2:humble-full-2023-10-01
+FROM althack/ros2:iron-full-2023-10-01
 
 # メンテナ情報
 LABEL maintainer="your-email@example.com"
@@ -16,16 +16,18 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /ros2_ws/src
 
 # Navigation2のリポジトリをクローン
-RUN git clone --branch main https://github.com/ros-planning/navigation2.git
+RUN git clone --branch main https://github.com/ros-planning/navigation2.git && \
+    cd navigation2 && \
+    git checkout 1.2.4
 
 # 依存関係のインストール
 RUN cd ../ && \
 rosdep update && \
 rosdep install --from-paths . --ignore-src -y
 
-# # ビルド
+# # # ビルド
 WORKDIR /ros2_ws
-RUN . /opt/ros/humble/setup.sh && \
+RUN . /opt/ros/iron/setup.sh && \
 colcon build
 
 # 環境変数の設定
